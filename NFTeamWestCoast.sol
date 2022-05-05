@@ -42,7 +42,7 @@ contract NFTeamWestCoast is ERC721, Ownable, ReentrancyGuard, PaymentSplitter {
         _;
     }
 
-    // @dev set state variable base URI
+    // @dev set state variable base URI : Can be set after deploy the contract in case of URI error
     function setBaseURI(string memory _uri) public onlyOwner
     {
         baseURI = _uri;
@@ -52,6 +52,7 @@ contract NFTeamWestCoast is ERC721, Ownable, ReentrancyGuard, PaymentSplitter {
         return baseURI;
     }
 
+ 
 
 
 }
