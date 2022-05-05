@@ -15,6 +15,11 @@ contract NFTeamWestCoast is ERC721, Ownable, ReentrancyGuard, PaymentSplitter {
 
     uint public maxSupply;
 
+    uint _price;
+
+    bool isPreSale;
+    bool paused;
+
     string public baseURI;
     string public baseExtension = ".json";
 
@@ -52,7 +57,32 @@ contract NFTeamWestCoast is ERC721, Ownable, ReentrancyGuard, PaymentSplitter {
         return baseURI;
     }
 
- 
+    // @dev Minting function during public sales
+    function publicSaleMint(uint _amount) external payable onlyAccounts
+    {
+        require(isPreSale, "NFTeamWestCoast: PublicSale is OFF");
+        require(!paused, "NFTeamWestCoast: Contract is paused");
+        require(_amount > 0, "NFTeamWestCoast: zero amount");
 
+        uint current = _tokenIds.current();
+
+        require(current + _amount <= maxSupply, "NFTeamWestCoast: Max supply exceeded");
+        require(_price * _amount <= msg.value, "NFTeamWestCoast: Not enough ethers sent");
+        
+        for (uint i = 0; i < _amount; i++) {
+            mintInternal();
+        }
+    }
+ 
+    // @dev Simple internal minting function
+    function mintInternal() internal nonReentrant {
+        _tokenIds.increment();
+        uint256 tokenId = _tokenIds.current();
+        _safeMint(msg.sender, tokenId);
+    }
+
+    function totalSupply() public view  returns(uint) {
+        return _tokenIds.current();
+    }
 
 }
