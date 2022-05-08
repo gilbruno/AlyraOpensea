@@ -33,12 +33,12 @@ contract NFTeamWestCoast is ERC721, Ownable, ReentrancyGuard, PaymentSplitter {
         0x594DB4be0477A6835AA2608119eA5Dd6F45F1C94
     ]; 
 
-    constructor(string memory _baseURI) 
-        ERC721("NFTeamWestCoast", "TWC")
+    constructor(string memory _name, string memory _symbol, string memory _baseUri)
+        ERC721(_name, _symbol)
         PaymentSplitter(_team, _teamShares)
         ReentrancyGuard()
     {
-        setBaseURI(_baseURI);
+        setBaseURI(_baseUri);
     }
 
     // @dev The msg.sensder must be the first one who called the function
